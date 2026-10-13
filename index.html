@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#5d9cef">
+  <title>Administração | Estação Alegria</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <a class="marca" href="#inicio">
+        <span class="marca-icone">EA</span>
+        <span><strong>Estação Alegria</strong><small>Painel administrativo</small></span>
+      </a>
+
+      <nav class="navegacao">
+        <a class="nav-link ativo" href="#inicio">🏠 Visão geral</a>
+        <a class="nav-link" href="#fotos">📸 Galeria de fotos</a>
+        <a class="nav-link" href="#eventos">🎉 Eventos</a>
+        <a class="nav-link" href="#promocoes">🎁 Promoções</a>
+        <a class="nav-link" href="#avisos">📢 Avisos</a>
+      </nav>
+
+      <div class="sidebar-final">
+        <span class="status"><i></i> Área administrativa</span>
+        <a href="https://dvfx4.github.io/esta-o-alegria-site-visitantes/"
+           target="_blank" rel="noopener noreferrer" class="link-publico">
+          ↗ Ver site público
+        </a>
+      </div>
+    </aside>
+
+    <main class="principal">
+      <header class="cabecalho">
+        <button class="botao-menu" id="botao-menu" aria-label="Abrir menu">☰</button>
+        <div>
+          <span class="subtitulo">ESTAÇÃO ALEGRIA</span>
+          <h1>Gerenciar conteúdo</h1>
+        </div>
+        <span class="avatar">EA</span>
+      </header>
+
+      <section id="inicio" class="boas-vindas">
+        <div>
+          <span class="etiqueta">SEU ESPAÇO, SUAS REGRAS</span>
+          <h2>Olá! Vamos atualizar o site? ☀️</h2>
+          <p>Gerencie fotos, eventos, promoções e avisos em um só lugar.</p>
+        </div>
+        <span class="decoracao">🌊</span>
+      </section>
+
+      <section class="resumos" aria-label="Resumo do painel">
+        <article class="resumo-card">
+          <span class="resumo-icone azul">📸</span>
+          <p>Fotos cadastradas</p><strong id="total-fotos">0</strong>
+        </article>
+        <article class="resumo-card">
+          <span class="resumo-icone amarelo">🎉</span>
+          <p>Eventos cadastrados</p><strong id="total-eventos">0</strong>
+        </article>
+        <article class="resumo-card">
+          <span class="resumo-icone verde">🎁</span>
+          <p>Promoções cadastradas</p><strong id="total-promocoes">0</strong>
+        </article>
+        <article class="resumo-card">
+          <span class="resumo-icone rosa">📢</span>
+          <p>Avisos cadastrados</p><strong id="total-avisos">0</strong>
+        </article>
+      </section>
+
+      <section class="painel" id="fotos">
+        <div class="titulo-secao">
+          <div><span class="etiqueta">GALERIA</span><h2>Adicionar fotos</h2></div>
+          <span class="mini-icone">📷</span>
+        </div>
+        <form id="form-fotos" class="formulario">
+          <label class="upload-area" for="arquivo-fotos">
+            <span class="upload-icone">☁️</span>
+            <strong>Escolha as fotos para enviar</strong>
+            <span>JPG, PNG ou WebP • você pode selecionar várias</span>
+            <input id="arquivo-fotos" type="file"
+                   accept="image/jpeg,image/png,image/webp" multiple required>
+          </label>
+          <div id="previas-fotos" class="previas"></div>
+          <label for="legenda-foto">Legenda das fotos (opcional)</label>
+          <input id="legenda-foto" type="text" maxlength="120"
+                 placeholder="Ex.: Um dia incrível na piscina">
+          <button class="botao primario" type="submit">Adicionar à galeria</button>
+        </form>
+        <div id="lista-fotos" class="lista-conteudos"></div>
+      </section>
+
+      <section class="painel" id="eventos">
+        <div class="titulo-secao">
+          <div><span class="etiqueta">PROGRAMAÇÃO</span><h2>Publicar evento</h2></div>
+          <span class="mini-icone">🎉</span>
+        </div>
+        <form id="form-eventos" class="formulario">
+          <label for="evento-titulo">Nome do evento</label>
+          <input id="evento-titulo" required maxlength="100"
+                 placeholder="Ex.: Domingo em família">
+          <label for="evento-data">Data do evento</label>
+          <input id="evento-data" type="date" required>
+          <label for="evento-descricao">Descrição</label>
+          <textarea id="evento-descricao" rows="3" maxlength="1000" required
+                    placeholder="Conte aos visitantes o que vai acontecer..."></textarea>
+          <button class="botao primario" type="submit">Cadastrar evento</button>
+        </form>
+        <div id="lista-eventos" class="lista-conteudos"></div>
+      </section>
+
+      <section class="painel" id="promocoes">
+        <div class="titulo-secao">
+          <div><span class="etiqueta">OFERTAS ESPECIAIS</span><h2>Criar promoção</h2></div>
+          <span class="mini-icone">🎁</span>
+        </div>
+        <form id="form-promocoes" class="formulario">
+          <label for="promocao-titulo">Título da promoção</label>
+          <input id="promocao-titulo" required maxlength="100"
+                 placeholder="Ex.: Promoção especial de domingo">
+          <label for="promocao-descricao">Descrição e condições</label>
+          <textarea id="promocao-descricao" rows="3" maxlength="1000" required
+                    placeholder="Informe os detalhes da oferta..."></textarea>
+          <label for="promocao-validade">Validade (opcional)</label>
+          <input id="promocao-validade" type="date">
+          <button class="botao primario" type="submit">Cadastrar promoção</button>
+        </form>
+        <div id="lista-promocoes" class="lista-conteudos"></div>
+      </section>
+
+      <section class="painel" id="avisos">
+        <div class="titulo-secao">
+          <div><span class="etiqueta">COMUNICADOS</span><h2>Publicar aviso</h2></div>
+          <span class="mini-icone">📢</span>
+        </div>
+        <form id="form-avisos" class="formulario">
+          <label for="aviso-titulo">Título do aviso</label>
+          <input id="aviso-titulo" required maxlength="100"
+                 placeholder="Ex.: Atenção aos visitantes">
+          <label for="aviso-descricao">Mensagem</label>
+          <textarea id="aviso-descricao" rows="3" maxlength="1000" required
+                    placeholder="Escreva o comunicado..."></textarea>
+          <button class="botao primario" type="submit">Publicar aviso</button>
+        </form>
+        <div id="lista-avisos" class="lista-conteudos"></div>
+      </section>
+
+      <footer class="rodape">
+        <span>Estação Alegria © <span id="ano"></span></span>
+        <span>Feito para facilitar seu dia ☀️</span>
+      </footer>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+    </html>
+    
