@@ -335,17 +335,58 @@ configurarFormulario(
   }
 );
 
-// Excluir conteúdo
-document.addEventListener("click", evento => {
+
+ // Excluir conteúdo do Supabase
+document.addEventListener("click", async evento => {
   const botao = evento.target.closest("[data-tipo]");
   if (!botao) return;
 
   const tipo = botao.dataset.tipo;
   const id = Number(botao.dataset.id);
 
+  if (!["fotos", "eventos", "promocoes", "avisos"].includes(tipo)) return;
   if (!confirm("Deseja realmente excluir este conteúdo?")) return;
 
-  dados[tipo] = dados[tipo].filter(item => item.id !== id);
+  botao.disabled = true;
+
+  try {
+    if (tipo === "fotos") {
+      const foto = dados.fotos.find(item => Number(item.id) === id);
+
+      if (!foto) throw new Error("Foto não encontrada.");
+
+      const { error: erroBanco } = await supabase
+        .from("fotos")
+        .delete()
+        .eq("id", id);
+
+      if (erroBanco) throw erroBanco;
+
+      if (foto.caminho_arquivo) {
+        const { error: erroArquivo } = await supabase.storage
+          .from("fotos")
+          .remove([foto.caminho_arquivo]);
+
+        if (erroArquivo) {
+          console.error("O registro foi excluído, mas o arquivo permaneceu:", erroArquivo);
+        }
+      }
+
+      dados.fotos = dados.fotos.filter(item => Number(item.id) !== id);
+    } else {
+      // Os outros conteúdos ainda são locais nesta etapa.
+      dados[tipo] = dados[tipo].filter(item => Number(item.id) !== id);
+      salvarDados();
+    }
+
+    renderizarTudo();
+  } catch (erro) {
+    console.error("Erro ao excluir conteúdo:", erro);
+    alert(`Não foi possível excluir: ${erro.message || "erro desconhecido"}`);
+    botao.disabled = false;
+  }
+});
+
 
   salvarDados();
   renderizarTudo();
