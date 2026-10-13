@@ -187,8 +187,9 @@ $("foto-arquivo").addEventListener("change", evento => {
   mensagem("mensagem-foto", "");
 });
 
-// Cadastrar foto
-$("form-foto").addEventListener("submit", evento => {
+
+ // Cadastrar foto no Supabase
+$("form-foto").addEventListener("submit", async evento => {
   evento.preventDefault();
 
   const arquivo = $("foto-arquivo").files[0];
@@ -199,26 +200,60 @@ $("form-foto").addEventListener("submit", evento => {
     return;
   }
 
-  // A imagem fica guardada como prévia nesta sessão.
-  const url = URL.createObjectURL(arquivo);
+  if (!arquivo.type.startsWith("image/")) {
+    mensagem("mensagem-foto", "Escolha um arquivo de imagem.", true);
+    return;
+  }
 
-  dados.fotos.unshift({
-    id: proximoId++,
-    titulo,
-    url,
-    nomeArquivo: arquivo.name,
-    arquivo
-  });
+  mensagem("mensagem-foto", "Enviando foto...");
 
-  salvarDados();
-  renderizarTudo();
+  try {
+    const nomeSeguro = arquivo.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const caminho = `${Date.now()}-${nomeSeguro}`;
 
-  evento.currentTarget.reset();
-  $("previa-foto").innerHTML =
-    "<span>🖼️</span><small>A prévia aparecerá aqui</small>";
+    const { error: erroUpload } = await supabase.storage
+      .from("fotos")
+      .upload(caminho, arquivo);
 
-  mensagem("mensagem-foto", "Foto adicionada para teste!");
+    if (erroUpload) throw erroUpload;
+
+    const { data: arquivoPublico } = supabase.storage
+      .from("fotos")
+      .getPublicUrl(caminho);
+
+    const { data, error } = await supabase
+      .from("fotos")
+      .insert([{
+        titulo,
+        url: arquivoPublico.publicUrl,
+        caminho_arquivo: caminho
+      }])
+      .select()
+      .single();
+
+    if (error) {
+      await supabase.storage.from("fotos").remove([caminho]);
+      throw error;
+    }
+
+    dados.fotos.unshift(data);
+    renderizarTudo();
+
+    evento.currentTarget.reset();
+    $("previa-foto").innerHTML =
+      "<span>🖼️</span><small>A prévia aparecerá aqui</small>";
+
+    mensagem("mensagem-foto", "Foto salva no Supabase com sucesso!");
+  } catch (erro) {
+    console.error("Erro ao cadastrar foto:", erro);
+    mensagem(
+      "mensagem-foto",
+      `Não foi possível salvar a foto: ${erro.message || "erro desconhecido"}`,
+      true
+    );
+  }
 });
+
 
 // Formulário genérico para eventos, promoções e avisos
 function configurarFormulario(formId, tipo, mensagemId, campos) {
