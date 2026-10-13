@@ -73,7 +73,22 @@ function carregarDados() {
     console.error("Não foi possível recuperar os dados:", erro);
   }
 }
+// Buscar fotos salvas no Supabase
+async function carregarFotosSupabase() {
+  const { data, error } = await supabase
+    .from("fotos")
+    .select("*")
+    .order("criado_em", { ascending: false });
 
+  if (error) {
+    console.error("Erro ao carregar fotos:", error);
+    mensagem("mensagem-foto", "Erro ao carregar fotos do banco.", true);
+    return;
+  }
+
+  dados.fotos = data || [];
+  renderizarTudo();
+}
 // Formatação de data
 function formatarData(data) {
   if (!data) return "";
