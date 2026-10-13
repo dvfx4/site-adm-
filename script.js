@@ -354,5 +354,6 @@ document.addEventListener("click", evento => {
 // Inicialização
 carregarDados();
 renderizarTudo();
+carregarFotosSupabase();
     
 
