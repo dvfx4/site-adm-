@@ -298,3 +298,28 @@ document.addEventListener("click", evento => {
 carregarDados();
 renderizarTudo();
     
+
+const botaoTema = document.getElementById("btn-tema");
+
+function aplicarTema(escuro) {
+  document.body.classList.toggle("tema-escuro", escuro);
+
+  if (botaoTema) {
+    botaoTema.textContent = escuro ? "🌙" : "☀️";
+    botaoTema.setAttribute(
+      "aria-label",
+      escuro ? "Ativar tema claro" : "Ativar tema escuro"
+    );
+  }
+
+  localStorage.setItem("temaEscuroADM", escuro ? "sim" : "nao");
+}
+
+if (botaoTema) {
+  botaoTema.addEventListener("click", () => {
+    const escuro = !document.body.classList.contains("tema-escuro");
+    aplicarTema(escuro);
+  });
+}
+
+aplicarTema(localStorage.getItem("temaEscuroADM") === "sim");
