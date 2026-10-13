@@ -155,32 +155,9 @@ function renderizarTudo() {
 
 // Login apenas demonstrativo nesta versão.
 // Não protege o painel: ainda não existe autenticação real.
-$("form-login").addEventListener("submit", evento => {
-  evento.preventDefault();
-
-  const email = $("email").value.trim();
-  const senha = $("senha").value;
-
-  if (!email || !senha) {
-    mensagem("mensagem-login", "Preencha o e-mail e a senha.", true);
-    return;
-  }
-
-  $("tela-login").hidden = true;
-  $("painel").hidden = false;
-  $("btn-sair").hidden = false;
-
-  mensagem("mensagem-login", "");
-  renderizarTudo();
-});
-
-$("btn-sair").addEventListener("click", () => {
-  $("painel").hidden = true;
-  $("tela-login").hidden = false;
-  $("btn-sair").hidden = true;
-
-  $("senha").value = "";
-});
+$("painel").hidden = false;
+$("btn-sair").hidden = true;
+renderizarTudo();
 
 // Prévia da foto selecionada
 $("foto-arquivo").addEventListener("change", evento => {
