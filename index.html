@@ -5,157 +5,173 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#5d9cef">
-  <title>Administração | Estação Alegria</title>
+  <title>ADM | Estação Alegria</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <div class="layout">
-    <aside class="sidebar" id="sidebar">
-      <a class="marca" href="#inicio">
-        <span class="marca-icone">EA</span>
-        <span><strong>Estação Alegria</strong><small>Painel administrativo</small></span>
-      </a>
+  <header class="topo">
+    <a class="marca" href="#">
+      <span class="logo">EA</span>
+      <span>
+        <strong>Estação Alegria</strong>
+        <small>Painel administrativo</small>
+      </span>
+    </a>
+    <div class="topo-acoes">
+      <span class="status">● Área restrita</span>
+      <button id="btn-sair" class="botao botao-claro" hidden>Sair</button>
+    </div>
+  </header>
 
-      <nav class="navegacao">
-        <a class="nav-link ativo" href="#inicio">🏠 Visão geral</a>
-        <a class="nav-link" href="#fotos">📸 Galeria de fotos</a>
-        <a class="nav-link" href="#eventos">🎉 Eventos</a>
-        <a class="nav-link" href="#promocoes">🎁 Promoções</a>
-        <a class="nav-link" href="#avisos">📢 Avisos</a>
-      </nav>
+  <main class="container">
+    <section id="tela-login" class="login cartao">
+      <span class="logo logo-grande">EA</span>
+      <span class="etiqueta">ACESSO RESTRITO</span>
+      <h1>Bem-vindo de volta!</h1>
+      <p>Gerencie o conteúdo que aparece no site dos visitantes.</p>
 
-      <div class="sidebar-final">
-        <span class="status"><i></i> Área administrativa</span>
-        <a href="https://dvfx4.github.io/esta-o-alegria-site-visitantes/"
-           target="_blank" rel="noopener noreferrer" class="link-publico">
-          ↗ Ver site público
-        </a>
-      </div>
-    </aside>
+      <form id="form-login">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" placeholder="seuemail@exemplo.com" required>
 
-    <main class="principal">
-      <header class="cabecalho">
-        <button class="botao-menu" id="botao-menu" aria-label="Abrir menu">☰</button>
+        <label for="senha">Senha</label>
+        <input id="senha" type="password" placeholder="Sua senha" required>
+
+        <button class="botao botao-azul botao-largo" type="submit">
+          Entrar no painel
+        </button>
+        <p id="mensagem-login" class="mensagem"></p>
+      </form>
+      <small class="texto-discreto">Acesso somente para pessoas autorizadas.</small>
+    </section>
+
+    <section id="painel" hidden>
+      <div class="boas-vindas">
         <div>
-          <span class="subtitulo">ESTAÇÃO ALEGRIA</span>
-          <h1>Gerenciar conteúdo</h1>
-        </div>
-        <span class="avatar">EA</span>
-      </header>
-
-      <section id="inicio" class="boas-vindas">
-        <div>
-          <span class="etiqueta">SEU ESPAÇO, SUAS REGRAS</span>
-          <h2>Olá! Vamos atualizar o site? ☀️</h2>
+          <span class="etiqueta">CENTRAL DE CONTEÚDO</span>
+          <h1>Vamos atualizar o site? <span>✦</span></h1>
           <p>Gerencie fotos, eventos, promoções e avisos em um só lugar.</p>
         </div>
-        <span class="decoracao">🌊</span>
-      </section>
+        <span class="sol">☀</span>
+      </div>
 
-      <section class="resumos" aria-label="Resumo do painel">
-        <article class="resumo-card">
-          <span class="resumo-icone azul">📸</span>
-          <p>Fotos cadastradas</p><strong id="total-fotos">0</strong>
+      <div class="resumos">
+        <article class="resumo cartao">
+          <span class="icone azul">▧</span>
+          <div><small>Fotos</small><strong id="total-fotos">0</strong></div>
         </article>
-        <article class="resumo-card">
-          <span class="resumo-icone amarelo">🎉</span>
-          <p>Eventos cadastrados</p><strong id="total-eventos">0</strong>
+        <article class="resumo cartao">
+          <span class="icone amarelo">🎉</span>
+          <div><small>Eventos</small><strong id="total-eventos">0</strong></div>
         </article>
-        <article class="resumo-card">
-          <span class="resumo-icone verde">🎁</span>
-          <p>Promoções cadastradas</p><strong id="total-promocoes">0</strong>
+        <article class="resumo cartao">
+          <span class="icone verde">％</span>
+          <div><small>Promoções</small><strong id="total-promocoes">0</strong></div>
         </article>
-        <article class="resumo-card">
-          <span class="resumo-icone rosa">📢</span>
-          <p>Avisos cadastrados</p><strong id="total-avisos">0</strong>
+        <article class="resumo cartao">
+          <span class="icone rosa">☷</span>
+          <div><small>Avisos</small><strong id="total-avisos">0</strong></div>
         </article>
-      </section>
+      </div>
 
-      <section class="painel" id="fotos">
-        <div class="titulo-secao">
-          <div><span class="etiqueta">GALERIA</span><h2>Adicionar fotos</h2></div>
-          <span class="mini-icone">📷</span>
-        </div>
-        <form id="form-fotos" class="formulario">
-          <label class="upload-area" for="arquivo-fotos">
-            <span class="upload-icone">☁️</span>
-            <strong>Escolha as fotos para enviar</strong>
-            <span>JPG, PNG ou WebP • você pode selecionar várias</span>
-            <input id="arquivo-fotos" type="file"
-                   accept="image/jpeg,image/png,image/webp" multiple required>
-          </label>
-          <div id="previas-fotos" class="previas"></div>
-          <label for="legenda-foto">Legenda das fotos (opcional)</label>
-          <input id="legenda-foto" type="text" maxlength="120"
-                 placeholder="Ex.: Um dia incrível na piscina">
-          <button class="botao primario" type="submit">Adicionar à galeria</button>
-        </form>
-        <div id="lista-fotos" class="lista-conteudos"></div>
-      </section>
+      <div class="grade">
+        <section class="cartao painel-card">
+          <div class="cabecalho-card">
+            <div><span class="etiqueta">01 / GALERIA</span><h2>Adicionar fotos</h2></div>
+            <span class="emoji">📸</span>
+          </div>
+          <p>Compartilhe os melhores momentos do clube.</p>
 
-      <section class="painel" id="eventos">
-        <div class="titulo-secao">
-          <div><span class="etiqueta">PROGRAMAÇÃO</span><h2>Publicar evento</h2></div>
-          <span class="mini-icone">🎉</span>
-        </div>
-        <form id="form-eventos" class="formulario">
-          <label for="evento-titulo">Nome do evento</label>
-          <input id="evento-titulo" required maxlength="100"
-                 placeholder="Ex.: Domingo em família">
-          <label for="evento-data">Data do evento</label>
-          <input id="evento-data" type="date" required>
-          <label for="evento-descricao">Descrição</label>
-          <textarea id="evento-descricao" rows="3" maxlength="1000" required
-                    placeholder="Conte aos visitantes o que vai acontecer..."></textarea>
-          <button class="botao primario" type="submit">Cadastrar evento</button>
-        </form>
-        <div id="lista-eventos" class="lista-conteudos"></div>
-      </section>
+          <form id="form-foto" class="formulario">
+            <label for="foto-titulo">Título da foto</label>
+            <input id="foto-titulo" required placeholder="Ex.: Dia de sol na piscina">
 
-      <section class="painel" id="promocoes">
-        <div class="titulo-secao">
-          <div><span class="etiqueta">OFERTAS ESPECIAIS</span><h2>Criar promoção</h2></div>
-          <span class="mini-icone">🎁</span>
-        </div>
-        <form id="form-promocoes" class="formulario">
-          <label for="promocao-titulo">Título da promoção</label>
-          <input id="promocao-titulo" required maxlength="100"
-                 placeholder="Ex.: Promoção especial de domingo">
-          <label for="promocao-descricao">Descrição e condições</label>
-          <textarea id="promocao-descricao" rows="3" maxlength="1000" required
-                    placeholder="Informe os detalhes da oferta..."></textarea>
-          <label for="promocao-validade">Validade (opcional)</label>
-          <input id="promocao-validade" type="date">
-          <button class="botao primario" type="submit">Cadastrar promoção</button>
-        </form>
-        <div id="lista-promocoes" class="lista-conteudos"></div>
-      </section>
+            <label for="foto-arquivo">Escolher imagem</label>
+            <input id="foto-arquivo" type="file" accept="image/*" required>
 
-      <section class="painel" id="avisos">
-        <div class="titulo-secao">
-          <div><span class="etiqueta">COMUNICADOS</span><h2>Publicar aviso</h2></div>
-          <span class="mini-icone">📢</span>
-        </div>
-        <form id="form-avisos" class="formulario">
-          <label for="aviso-titulo">Título do aviso</label>
-          <input id="aviso-titulo" required maxlength="100"
-                 placeholder="Ex.: Atenção aos visitantes">
-          <label for="aviso-descricao">Mensagem</label>
-          <textarea id="aviso-descricao" rows="3" maxlength="1000" required
-                    placeholder="Escreva o comunicado..."></textarea>
-          <button class="botao primario" type="submit">Publicar aviso</button>
-        </form>
-        <div id="lista-avisos" class="lista-conteudos"></div>
-      </section>
+            <div id="previa-foto" class="previa">
+              <span>🖼️</span><small>A prévia aparecerá aqui</small>
+            </div>
 
-      <footer class="rodape">
-        <span>Estação Alegria © <span id="ano"></span></span>
-        <span>Feito para facilitar seu dia ☀️</span>
-      </footer>
-    </main>
-  </div>
+            <button class="botao botao-azul botao-largo" type="submit">Enviar foto</button>
+            <p id="mensagem-foto" class="mensagem"></p>
+          </form>
+          <div id="lista-fotos" class="lista"></div>
+        </section>
 
-  <script src="script.js"></script>
+        <section class="cartao painel-card">
+          <div class="cabecalho-card">
+            <div><span class="etiqueta">02 / AGENDA</span><h2>Criar evento</h2></div>
+            <span class="emoji">🎉</span>
+          </div>
+          <p>Divulgue festas e atividades especiais.</p>
+
+          <form id="form-evento" class="formulario">
+            <label for="evento-titulo">Nome do evento</label>
+            <input id="evento-titulo" required placeholder="Domingo em família">
+
+            <div class="linha">
+              <div><label for="evento-data">Data</label><input id="evento-data" type="date"></div>
+              <div><label for="evento-hora">Horário</label><input id="evento-hora" type="time"></div>
+            </div>
+
+            <label for="evento-descricao">Descrição</label>
+            <textarea id="evento-descricao" rows="3" placeholder="O que vai acontecer?"></textarea>
+
+            <button class="botao botao-azul botao-largo" type="submit">Publicar evento</button>
+            <p id="mensagem-evento" class="mensagem"></p>
+          </form>
+          <div id="lista-eventos" class="lista"></div>
+        </section>
+
+        <section class="cartao painel-card">
+          <div class="cabecalho-card">
+            <div><span class="etiqueta">03 / OFERTAS</span><h2>Nova promoção</h2></div>
+            <span class="emoji">🎁</span>
+          </div>
+          <p>Mostre ofertas e condições especiais.</p>
+
+          <form id="form-promocao" class="formulario">
+            <label for="promocao-titulo">Título da promoção</label>
+            <input id="promocao-titulo" required placeholder="Oferta especial">
+
+            <label for="promocao-descricao">Detalhes da oferta</label>
+            <textarea id="promocao-descricao" rows="3" placeholder="Descreva a oferta e suas condições"></textarea>
+
+            <label for="promocao-validade">Válida até (opcional)</label>
+            <input id="promocao-validade" type="date">
+
+            <button class="botao botao-azul botao-largo" type="submit">Publicar promoção</button>
+            <p id="mensagem-promocao" class="mensagem"></p>
+          </form>
+          <div id="lista-promocoes" class="lista"></div>
+        </section>
+
+        <section class="cartao painel-card">
+          <div class="cabecalho-card">
+            <div><span class="etiqueta">04 / COMUNICADOS</span><h2>Publicar aviso</h2></div>
+            <span class="emoji">📣</span>
+          </div>
+          <p>Avise sobre funcionamento e novidades.</p>
+
+          <form id="form-aviso" class="formulario">
+            <label for="aviso-titulo">Título do aviso</label>
+            <input id="aviso-titulo" required placeholder="Atenção, visitantes">
+
+            <label for="aviso-descricao">Mensagem</label>
+            <textarea id="aviso-descricao" rows="3" required placeholder="Escreva o aviso"></textarea>
+
+            <button class="botao botao-azul botao-largo" type="submit">Publicar aviso</button>
+            <p id="mensagem-aviso" class="mensagem"></p>
+          </form>
+          <div id="lista-avisos" class="lista"></div>
+        </section>
+      </div>
+
+      <footer>Feito para facilitar o dia a dia da <strong>Estação Alegria</strong> 💙</footer>
+    </section>
+  </main>
 </body>
-    </html>
-    
+</html>
