@@ -7,7 +7,6 @@
   <meta name="theme-color" content="#5d9cef">
   <title>ADM | Estação Alegria</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js" defer></script>
 </head>
 <body>
@@ -19,9 +18,22 @@
         <small>Painel administrativo</small>
       </span>
     </a>
+
     <div class="topo-acoes">
       <span class="status">● Área restrita</span>
-      <button id="btn-sair" class="botao botao-claro" hidden>Sair</button>
+
+      <!-- Botão para alternar entre sol e lua -->
+      <button
+        id="btn-tema"
+        class="btn-tema"
+        type="button"
+        aria-label="Ativar tema escuro"
+        title="Alternar tema"
+      >☀️</button>
+
+      <button id="btn-sair" class="botao botao-claro" hidden>
+        Sair
+      </button>
     </div>
   </header>
 
